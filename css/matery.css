@@ -38,7 +38,7 @@ body {
     background-color: #eaeaea;
     margin: 0;
     color: #34495e;
-    cursor: url(css/pointer.cur),auto;
+    cursor: url(https://cdn.jsdelivr.net/gh/LawranceCha/LawranceCha.github.io/css/pointer.cur),auto;
 }
 
 h1 {
@@ -268,7 +268,7 @@ mark {
 }
 
 .bg-color {
-    background-image: linear-gradient(to right, #66CCCC 0%, #66CCFF 100%);
+    background-image: linear-gradient(90deg,rgba(247,149,51,.1) 0,rgba(243,112,85,.1) 15%,rgba(239,78,123,.1) 30%,rgba(161,102,171,.1) 44%,rgba(80,115,184,.1) 58%,rgba(16,152,173,.1) 72%,rgba(7,179,155,.1) 86%,rgba(109,186,130,.1) 100%);
 }
 
 .text-color {
