@@ -2188,3 +2188,11 @@ footer .copy-right {
 	fill: currentColor;
 	overflow: hidden
 }
+  
+::selection { 
+    background:pink; 
+}   
+
+::-moz-selection { 
+    background:pink; 
+}   
