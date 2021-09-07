@@ -112,33 +112,6 @@
     
     
     <entry>
-      <title>Eureka</title>
-      <link href="/2019/06/29/03-06/"/>
-      <url>/2019/06/29/03-06/</url>
-      
-        <content type="html"><![CDATA[<h2 id="Spring-Cloud-Eureka注册中心"><a href="#Spring-Cloud-Eureka注册中心" class="headerlink" title="Spring Cloud Eureka注册中心"></a>Spring Cloud Eureka注册中心</h2><blockquote><p>由于Spring Cloud为服务治理做了一层抽象接口，所以在Spring Cloud应用中可以支持多种不同的服务治理框架，比如：Netflix Eureka、Consul、Zookeeper。在Spring Cloud服务治理抽象层的作用下，我们可以无缝地切换服务治理实现，并且不影响任何其他的服务注册、服务发现、服务调用等逻辑。</p></blockquote><p>Eureka是netflix的一个子模块，也是核心模块之一，Eureka是一个基于REST的服务，用于定位服务，以实现云端中间层服务发现和故障转移。服务注册与发现对于微服务架构来说是非常重要的，有了服务发现和注册，只需要使用服务的标识符，就可以访问到服务，而不需要修改服务，而不需要修改服务调用的配置文件了，功能类似于dubbo的注册中心，比如zookeeper。</p><p><img src="https://img-blog.csdnimg.cn/20190619213457296.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM3OTM3MTQ0,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>Eureka采用了C-S的设计架构。Eureka Server作为服务注册功能的服务器，它是服务注册时中心。</p><p>而系统中的其他微服务，使用eureka的客户端连接到eureka server并维持心跳连接。这样系统的维护人员就可以通过eureka server来监控系统中各个微服务是否正常运行。SpringCloud的一些其他模块就可以通过eureka server来发现系统中的其他微服务，并执行相关的逻辑。</p><h2 id="三大角色："><a href="#三大角色：" class="headerlink" title="三大角色："></a>三大角色：</h2><p><code>Eureka Server</code>提供服务注册服务。各个服务提供者节点启动后，会在Eureka Server中进行注册，这样Eureka server中的服务注册表中将会存储所有可用服务节点的信息，服务节点的信息可以在界面中直观的看到</p><p><code>Service Provider</code>服务提供方将自身服务注册到Eureka，从而使服务消费方能够找到。</p><p><code>Service Consumer</code>服务消费方从Eureka获取注册服务列表，从而能够消费服务。</p><p>Eureka client是一个java客户端，用于简化eureka server的交互，在应用启动后，将会向Eureka Server发送心跳。如果Eureka Server在多个心跳周期内没有接收到某个节点的心跳，Eureka Server将会从服务注册表把这个服务节点移除。</p><h2 id="搭建简易的单机注册中心-eureka"><a href="#搭建简易的单机注册中心-eureka" class="headerlink" title="搭建简易的单机注册中心(eureka)"></a>搭建简易的单机注册中心(eureka)</h2><p>实现效果，搭建一个maven项目，作为eureka注册中心，用户注册和发现服务。可以通过一个web页面查看。<br><strong>步骤：</strong></p><blockquote><p>1、搭建一个普通的maven项目<br>2、导入pom依赖：需要web依赖和eureka的server依赖；<br>3、application.yml配置<br>4、一个springboot的启动入口类：需要增加一个eureka的服务注解<br>5、启动，页面访问web页面</p></blockquote><p>导入pom依赖：</p><pre><code>&lt;!--springboot支持--&gt;&lt;dependency&gt;    &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;    &lt;artifactId&gt;spring-boot-starter-web&lt;/artifactId&gt;&lt;/dependency&gt;&lt;dependency&gt;    &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;    &lt;artifactId&gt;spring-boot-starter-test&lt;/artifactId&gt;&lt;/dependency&gt;&lt;!--Eureka服务端支持--&gt;&lt;dependency&gt;    &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;    &lt;artifactId&gt;spring-cloud-starter-netflix-eureka-server&lt;/artifactId&gt;&lt;/dependency&gt;</code></pre><p>application.yml配置</p><pre><code>server:  port: 7001eureka:  instance:    hostname: localhost  client:    registerWithEureka: false #是否要注册到eureka    fetchRegistry: false #表示是否从Eureka Server获取注册信息    serviceUrl:      defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka/ #单机配置</code></pre><p>启动入口类</p><pre><code>@SpringBootApplication@EnableEurekaServer //标识是eureka服务端public class EnrekaServerApplication_7001 {    public static void main(String[] args) {        SpringApplication.run(EnrekaServerApplication_7001.class);    }}</code></pre><p>通过启动类启动，这时候直接访问yml文件中配置的<code>localhost:7001</code><br><img src="https://img-blog.csdnimg.cn/20190619214323861.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM3OTM3MTQ0,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>]]></content>
-      
-      
-      <categories>
-          
-          <category> Java笔记 </category>
-          
-      </categories>
-      
-      
-        <tags>
-            
-            <tag> java </tag>
-            
-            <tag> eureka </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    
-    
-    <entry>
       <title>常见的JVM相关问题</title>
       <link href="/2019/06/29/03-08/"/>
       <url>/2019/06/29/03-08/</url>
@@ -158,6 +131,33 @@
             <tag> java </tag>
             
             <tag> jvm </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>Eureka</title>
+      <link href="/2019/06/29/03-06/"/>
+      <url>/2019/06/29/03-06/</url>
+      
+        <content type="html"><![CDATA[<h2 id="Spring-Cloud-Eureka注册中心"><a href="#Spring-Cloud-Eureka注册中心" class="headerlink" title="Spring Cloud Eureka注册中心"></a>Spring Cloud Eureka注册中心</h2><blockquote><p>由于Spring Cloud为服务治理做了一层抽象接口，所以在Spring Cloud应用中可以支持多种不同的服务治理框架，比如：Netflix Eureka、Consul、Zookeeper。在Spring Cloud服务治理抽象层的作用下，我们可以无缝地切换服务治理实现，并且不影响任何其他的服务注册、服务发现、服务调用等逻辑。</p></blockquote><p>Eureka是netflix的一个子模块，也是核心模块之一，Eureka是一个基于REST的服务，用于定位服务，以实现云端中间层服务发现和故障转移。服务注册与发现对于微服务架构来说是非常重要的，有了服务发现和注册，只需要使用服务的标识符，就可以访问到服务，而不需要修改服务，而不需要修改服务调用的配置文件了，功能类似于dubbo的注册中心，比如zookeeper。</p><p><img src="https://img-blog.csdnimg.cn/20190619213457296.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM3OTM3MTQ0,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>Eureka采用了C-S的设计架构。Eureka Server作为服务注册功能的服务器，它是服务注册时中心。</p><p>而系统中的其他微服务，使用eureka的客户端连接到eureka server并维持心跳连接。这样系统的维护人员就可以通过eureka server来监控系统中各个微服务是否正常运行。SpringCloud的一些其他模块就可以通过eureka server来发现系统中的其他微服务，并执行相关的逻辑。</p><h2 id="三大角色："><a href="#三大角色：" class="headerlink" title="三大角色："></a>三大角色：</h2><p><code>Eureka Server</code>提供服务注册服务。各个服务提供者节点启动后，会在Eureka Server中进行注册，这样Eureka server中的服务注册表中将会存储所有可用服务节点的信息，服务节点的信息可以在界面中直观的看到</p><p><code>Service Provider</code>服务提供方将自身服务注册到Eureka，从而使服务消费方能够找到。</p><p><code>Service Consumer</code>服务消费方从Eureka获取注册服务列表，从而能够消费服务。</p><p>Eureka client是一个java客户端，用于简化eureka server的交互，在应用启动后，将会向Eureka Server发送心跳。如果Eureka Server在多个心跳周期内没有接收到某个节点的心跳，Eureka Server将会从服务注册表把这个服务节点移除。</p><h2 id="搭建简易的单机注册中心-eureka"><a href="#搭建简易的单机注册中心-eureka" class="headerlink" title="搭建简易的单机注册中心(eureka)"></a>搭建简易的单机注册中心(eureka)</h2><p>实现效果，搭建一个maven项目，作为eureka注册中心，用户注册和发现服务。可以通过一个web页面查看。<br><strong>步骤：</strong></p><blockquote><p>1、搭建一个普通的maven项目<br>2、导入pom依赖：需要web依赖和eureka的server依赖；<br>3、application.yml配置<br>4、一个springboot的启动入口类：需要增加一个eureka的服务注解<br>5、启动，页面访问web页面</p></blockquote><p>导入pom依赖：</p><pre><code>&lt;!--springboot支持--&gt;&lt;dependency&gt;    &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;    &lt;artifactId&gt;spring-boot-starter-web&lt;/artifactId&gt;&lt;/dependency&gt;&lt;dependency&gt;    &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;    &lt;artifactId&gt;spring-boot-starter-test&lt;/artifactId&gt;&lt;/dependency&gt;&lt;!--Eureka服务端支持--&gt;&lt;dependency&gt;    &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;    &lt;artifactId&gt;spring-cloud-starter-netflix-eureka-server&lt;/artifactId&gt;&lt;/dependency&gt;</code></pre><p>application.yml配置</p><pre><code>server:  port: 7001eureka:  instance:    hostname: localhost  client:    registerWithEureka: false #是否要注册到eureka    fetchRegistry: false #表示是否从Eureka Server获取注册信息    serviceUrl:      defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka/ #单机配置</code></pre><p>启动入口类</p><pre><code>@SpringBootApplication@EnableEurekaServer //标识是eureka服务端public class EnrekaServerApplication_7001 {    public static void main(String[] args) {        SpringApplication.run(EnrekaServerApplication_7001.class);    }}</code></pre><p>通过启动类启动，这时候直接访问yml文件中配置的<code>localhost:7001</code><br><img src="https://img-blog.csdnimg.cn/20190619214323861.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM3OTM3MTQ0,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>]]></content>
+      
+      
+      <categories>
+          
+          <category> Java笔记 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> java </tag>
+            
+            <tag> eureka </tag>
             
         </tags>
       
